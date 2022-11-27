@@ -12,11 +12,9 @@ import aojie.love.mapper.CommentMapper;
 import aojie.love.service.CommentService;
 import aojie.love.service.UserService;
 import aojie.love.utils.BeanCopyUtils;
-import aojie.love.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -38,20 +36,25 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     /**
      *  查询评论
+     *
+     * @param commentType
      * @param articleId
      * @param pageNum
      * @param pageSize
      * @return
      */
     @Override
-    public Result getCommentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public Result getCommentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         // 查询文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
 
-        // 根据文章id进行查询
-        queryWrapper.eq(Comment::getArticleId,articleId);
+        // 根据文章id进行查询(类型为文章的时候才查询)
+        queryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId);
         // 根据根评论进行查询
         queryWrapper.eq(Comment::getRootId, SystemConstants.IS_ROOT);
+        // 评论类型
+        queryWrapper.eq(Comment::getType,commentType);
+
 
         // 分页查询
         Page<Comment> page = new Page<>(pageNum,pageSize);
@@ -121,6 +124,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return commentVos.stream().map(commentVo ->{
             // 通过createBy的id查询出评论人的昵称
             User rootUser = userService.getById(commentVo.getCreateBy());
+            if (rootUser == null){
+                throw new SystemException(AppHttpCodeEnum.SYSTEM_ERROR);
+            }
             String rootNickName = rootUser.getNickName();
             commentVo.setUsername(rootNickName);
 

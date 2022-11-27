@@ -38,9 +38,13 @@ public class SystemConstants {
      *  文章评论是根评论
      */
     public static final String IS_ROOT = "-1";
-//    /**
-//     *  文章评论不是根评论
-//     */
-//    public static final String IS_NOT_ROOT = "0";
+    /**
+     * 文章评论
+     */
+    public static final String ARTICLE_COMMENT = "0";
+    /**
+     * 友链评论
+     */
+    public static final String LINK_COMMENT = "1";
 
 }
