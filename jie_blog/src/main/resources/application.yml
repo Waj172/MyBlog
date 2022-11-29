@@ -29,3 +29,8 @@ mybatis-plus:
       logic-delete-value: 1
       # 表前缀
       table-prefix: aj_
+oss:
+  accessKey: LTAI5tCqvFbWEzNxAYLfJvoA
+  secretKey: r68uXInscuqZmlH5nhE92AEETOS48k
+  bucketName: waj172
+  url: static.aojie.love

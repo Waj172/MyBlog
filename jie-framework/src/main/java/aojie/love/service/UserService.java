@@ -1,6 +1,7 @@
 package aojie.love.service;
 
 import aojie.love.domain.entity.User;
+import aojie.love.global.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -12,4 +13,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     *  获取用户信息
+     * @return
+     */
+    Result getUserInfo();
+
+    /**
+     *  修改用户信息
+     * @param user
+     * @return
+     */
+    Result updateUserInfo(User user);
 }
